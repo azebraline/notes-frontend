@@ -28,7 +28,6 @@ public class LoginController {
     private TextField userNameField;
     @FXML
     private Button exitButton;
-    ;
     private Stage stage = ClientApplication.getPrimaryStage();
     private Scene scene;
 

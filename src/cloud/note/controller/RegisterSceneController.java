@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
+import static cloud.note.config.Constants.DELIMITER;
+
 public class RegisterSceneController {
 
     @FXML
@@ -22,7 +24,7 @@ public class RegisterSceneController {
     private PasswordField registerPasswordRepeat;
 
 
-    private Stage stage = ClientApplication.getPrimaryStage();
+    private final Stage stage = ClientApplication.getPrimaryStage();
     private Scene scene;
 
     @FXML
@@ -41,7 +43,6 @@ public class RegisterSceneController {
 
     @FXML
     public void registerButtonPress() throws IOException {
-        System.out.println("regasfa######");
         registerVerify();
     }
 
@@ -51,7 +52,7 @@ public class RegisterSceneController {
 
             String username = registerUserName.getText();
             String password = registerPassword.getText();
-            String res = Client.sentStr("reg;"+username+";"+password);
+            String res = Client.sentStr("reg"+DELIMITER+username+DELIMITER+password);
             System.out.println(res);
             if ("true".equals(res)) {
                 Alert alert = new Alert(AlertType.CONFIRMATION, "是否要跳转登陆界面？");
@@ -60,7 +61,7 @@ public class RegisterSceneController {
                 alert.initOwner(stage);
 
                 Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
+                if (result.isPresent() && result.get() == ButtonType.OK) {
                     scene = new Scene(FXMLLoader.load(getClass().getResource("../layout/LoginScene.fxml")));
                     stage.setScene(scene);
                 }

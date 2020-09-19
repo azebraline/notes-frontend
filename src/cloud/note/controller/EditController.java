@@ -2,7 +2,6 @@ package cloud.note.controller;
 
 import cloud.note.dao.ArticleDao;
 import cloud.note.dao.CategoryDao;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -10,15 +9,16 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static cloud.note.config.Constants.DELIMITER;
+import static cloud.note.config.Constants.END;
 
 public class EditController implements Initializable {
 
@@ -71,10 +71,9 @@ public class EditController implements Initializable {
     @FXML
     Button artCloseReadButton;
     private Stage stage = null;
-    private Map<Integer, String> map = new LinkedHashMap<>();
-    private ResultSet rs = null;
+    private final Map<Integer, String> map = new LinkedHashMap<>();
     private int count = 0;
-    private Set<Integer> keySet = null;
+    private Set<Integer> keySet;
     private int j = 1;
     private int k = 1;
     private int l = 1;
@@ -115,17 +114,17 @@ public class EditController implements Initializable {
      * --------文章新建页面------------
      */
     @FXML
-    public void readCategoryBoxClick(MouseEvent event) throws IOException {
+    public void readCategoryBoxClick() throws IOException {
         choiceBoxReadCat();
     }
 
     @FXML
-    public void artSubmitButtonClick(ActionEvent event) {
+    public void artSubmitButtonClick() {
         try {
             art = "";
-            art += new LoginController().getUserId() + ";" + getCatId(readCategoryBox.getValue()) + ";" + artTitleField.getText() + ";" + editorField.getHtmlText() + ";" + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            art += new LoginController().getUserId() + DELIMITER + getCatId(readCategoryBox.getValue().trim()) + DELIMITER + artTitleField.getText().trim() + DELIMITER + editorField.getHtmlText().trim() + DELIMITER + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-            if (readCategoryBox.getValue() != "" && artTitleField.getText().length() != 0) {
+            if (!readCategoryBox.getValue().isEmpty() && artTitleField.getText().length() != 0) {
                 String res = ArticleDao.insert(art);
                 if ("false".equals(res)) {
                     Alert alert = new Alert(AlertType.ERROR, "创建失败");
@@ -153,13 +152,13 @@ public class EditController implements Initializable {
     }
 
     @FXML
-    public void artCancelButtonClick(ActionEvent event) {
+    public void artCancelButtonClick() {
         Stage stage = (Stage) artCancelButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    public void artResetButtonClick(ActionEvent event) {
+    public void artResetButtonClick() {
         editorField.setHtmlText("");
         editorField.requestFocus();
     }
@@ -173,12 +172,12 @@ public class EditController implements Initializable {
     }
 
     @FXML
-    public void artSubmitButtonUpdateClick(ActionEvent event) {
+    public void artSubmitButtonUpdateClick() {
         try {
 
             art = "";
-            art += new LoginController().getUserId() + ";" + getCatId(readCategoryUpdateBox.getValue()) + ";" + artTitleUpdateField.getText() + ";" + editorUpdateField.getHtmlText() + ";" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ";" + MainSceneController.getSelectedRowArt.getArtId();
-            if (readCategoryUpdateBox.getValue() != "" && artTitleUpdateField.getText().length() != 0) {
+            art += new LoginController().getUserId() + DELIMITER + getCatId(readCategoryUpdateBox.getValue()) + DELIMITER + artTitleUpdateField.getText() + DELIMITER + editorUpdateField.getHtmlText() + DELIMITER + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + DELIMITER + MainSceneController.getSelectedRowArt.getArtId();
+            if (!readCategoryUpdateBox.getValue().isEmpty() && artTitleUpdateField.getText().length() != 0) {
                 if (ArticleDao.update(art).equals("true")) {
                     stage = (Stage) artSubmitUpdateButton.getScene().getWindow();
                     stage.close();
@@ -207,13 +206,13 @@ public class EditController implements Initializable {
     }
 
     @FXML
-    public void artCancelButtonUpdateClick(ActionEvent event) {
+    public void artCancelButtonUpdateClick() {
         Stage stage = (Stage) artCancelUpdateButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    public void artResetButtonUpdateClick(ActionEvent event) {
+    public void artResetButtonUpdateClick() {
         artTitleUpdateField.setText("");
         editorUpdateField.setHtmlText("");
         editorUpdateField.requestFocus();
@@ -223,7 +222,7 @@ public class EditController implements Initializable {
      * -------------------文章查看页面---------------------------
      */
     @FXML
-    public void artCloseButtonReadClick(ActionEvent event) {
+    public void artCloseButtonReadClick() {
         Stage stage = (Stage) artCloseReadButton.getScene().getWindow();
         stage.close();
     }
@@ -232,9 +231,9 @@ public class EditController implements Initializable {
      * -------------------类别新建页面---------------------------
      */
     @FXML
-    public void catSubmitButtonClick(ActionEvent event) throws IOException {
+    public void catSubmitButtonClick() throws IOException {
         cat = "";
-        cat += new LoginController().getUserId() + ";" + newCategoryField.getText() + ";" + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        cat += new LoginController().getUserId() + DELIMITER + newCategoryField.getText() + DELIMITER + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         if (newCategoryField.getText().length() != 0) {
             String res = CategoryDao.insert(cat);
             if ("false".equals(res)) {
@@ -255,13 +254,13 @@ public class EditController implements Initializable {
     }
 
     @FXML
-    public void catCancelButtonClick(ActionEvent event) {
+    public void catCancelButtonClick() {
         Stage stage = (Stage) catCancelButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    public void catResetButtonClick(ActionEvent event) {
+    public void catResetButtonClick() {
         newCategoryField.setText("");
         newCategoryField.requestFocus();
     }
@@ -270,12 +269,12 @@ public class EditController implements Initializable {
      * ----------------类别修改界面---------------------------------------
      */
     @FXML
-    public void catSubmitUpdateButtonClick(ActionEvent event) throws IOException {
+    public void catSubmitUpdateButtonClick() throws IOException {
         MainSceneController.getSelectedRowCat.setCatCreateTime(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         MainSceneController.getSelectedRowCat.setCatName(newCategoryUpdateField.getText());
         if (newCategoryUpdateField.getText().length() != 0) {
             cat = "";
-            cat += MainSceneController.getSelectedRowCat.getCatName() + ";" + MainSceneController.getSelectedRowCat.getCatCreateTime() + ";" + MainSceneController.getSelectedRowCat.getCatId();
+            cat += MainSceneController.getSelectedRowCat.getCatName() + DELIMITER + MainSceneController.getSelectedRowCat.getCatCreateTime() + DELIMITER + MainSceneController.getSelectedRowCat.getCatId();
             String res = CategoryDao.update(cat);
             if ("false".equals(res)) {
                 Alert alert = new Alert(AlertType.ERROR, "修改失败");
@@ -295,13 +294,13 @@ public class EditController implements Initializable {
     }
 
     @FXML
-    public void catCancelUpdateButtonClick(ActionEvent event) {
+    public void catCancelUpdateButtonClick() {
         Stage stage = (Stage) catCancelUpdateButton.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    public void catResetUpdateButtonClick(ActionEvent event) {
+    public void catResetUpdateButtonClick() {
         newCategoryUpdateField.setText("");
         newCategoryUpdateField.requestFocus();
     }
@@ -353,10 +352,10 @@ public class EditController implements Initializable {
     private void initArticleEditScene() throws IOException {
         count = 1;
         String cate = CategoryDao.select(Integer.toString(new LoginController().getUserId()));
-        for (String category : cate.split("10010")) {
-            int id = Integer.valueOf(category.split(";")[0]);
-            int userId = Integer.valueOf(category.split(";")[1]);
-            String name = category.split(";")[3];
+        for (String category : cate.split(END)) {
+            int id = Integer.parseInt(category.split(DELIMITER)[0]);
+            int userId = Integer.parseInt(category.split(DELIMITER)[1]);
+            String name = category.split(DELIMITER)[3];
             if (userId == new LoginController().getUserId()) {
                 map.put(id, name);
                 count++;

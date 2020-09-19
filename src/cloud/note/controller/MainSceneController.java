@@ -27,8 +27,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Objects;
+
+import static cloud.note.config.Constants.DELIMITER;
+import static cloud.note.config.Constants.END;
 
 public class MainSceneController {
 
@@ -38,35 +40,35 @@ public class MainSceneController {
     @FXML
     final static Label welcomeLabel = new Label();
     @FXML
-    final static TableView<ArticleProperty> articleTable = new TableView<ArticleProperty>();
+    final static TableView<ArticleProperty> articleTable = new TableView<>();
     @FXML
-    final static TableView<CategoryProperty> categoryTable = new TableView<CategoryProperty>();
-    private static final Label artlabel = new Label();
+    final static TableView<CategoryProperty> categoryTable = new TableView<>();
+    private static final Label artLabel = new Label();
     private static final Label label = new Label();
     public static ArticleProperty getSelectedRowArt;
     // 相关类别变量
     public static CategoryProperty getSelectedRowCat;
-    private static ObservableList<CategoryProperty> catData = FXCollections.observableArrayList();
+    private static final ObservableList<CategoryProperty> catData = FXCollections.observableArrayList();
     @FXML
-    final TableColumn<ArticleProperty, String> artId = new TableColumn<ArticleProperty, String>("Id");
+    final TableColumn<ArticleProperty, String> artId = new TableColumn<>("Id");
     @FXML
-    final TableColumn<ArticleProperty, String> artIndex = new TableColumn<ArticleProperty, String>("序号");
+    final TableColumn<ArticleProperty, String> artIndex = new TableColumn<>("序号");
     @FXML
-    final TableColumn<ArticleProperty, String> artName = new TableColumn<ArticleProperty, String>("标题");
+    final TableColumn<ArticleProperty, String> artName = new TableColumn<>("标题");
     @FXML
-    final TableColumn<ArticleProperty, String> catNameOfArt = new TableColumn<ArticleProperty, String>("类名");
+    final TableColumn<ArticleProperty, String> catNameOfArt = new TableColumn<>("类名");
     @FXML
-    final TableColumn<ArticleProperty, String> artTime = new TableColumn<ArticleProperty, String>("创建时间");
+    final TableColumn<ArticleProperty, String> artTime = new TableColumn<>("创建时间");
     @FXML
-    final TableColumn<CategoryProperty, String> catId = new TableColumn<CategoryProperty, String>("Id");
+    final TableColumn<CategoryProperty, String> catId = new TableColumn<>("Id");
     @FXML
-    final TableColumn<CategoryProperty, String> catIndex = new TableColumn<CategoryProperty, String>("序号");
+    final TableColumn<CategoryProperty, String> catIndex = new TableColumn<>("序号");
     @FXML
-    final TableColumn<CategoryProperty, String> catName = new TableColumn<CategoryProperty, String>("类名");
+    final TableColumn<CategoryProperty, String> catName = new TableColumn<>("类名");
     @FXML
-    final TableColumn<CategoryProperty, String> catCreateTime = new TableColumn<CategoryProperty, String>("创建时间");
-    private final VBox avbox = new VBox();
-    private final HBox ahbox = new HBox();
+    final TableColumn<CategoryProperty, String> catCreateTime = new TableColumn<>("创建时间");
+    private final VBox avBox = new VBox();
+    private final HBox ahBox = new HBox();
     private final VBox vbox = new VBox();
     private final HBox hbox = new HBox();
     @FXML
@@ -124,11 +126,7 @@ public class MainSceneController {
     Button updateCategoryButton;
     @FXML
     Button deleteCategoryButton;
-    // 相关文章变量
-    private ArticleProperty ap;
     private int readOnce = 1;
-    private Map<Integer, String> map = new LinkedHashMap<>();
-    private CategoryProperty cp;
     private int readOrNot = 1;
     /**
      * -----全局变量--------
@@ -141,7 +139,7 @@ public class MainSceneController {
         getSelectedRowCat = null;
         getSelectedRowArt = null;
         categoryTable.setOnMouseClicked(event -> getSelectedRowCat = categoryTable.getSelectionModel().getSelectedItem());
-        articleTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        articleTable.setOnMouseClicked(new EventHandler<>() {
             @Override
             public void handle(MouseEvent event) {
                 getSelectedRowArt = articleTable.getSelectionModel().getSelectedItem();
@@ -155,7 +153,7 @@ public class MainSceneController {
                     stage.setTitle("查看文章");
                     stage.setScene(scene);
                     stage.getIcons()
-                            .add(new Image(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png")));
+                            .add(new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png"))));
                     stage.show();
                 }
             }
@@ -168,7 +166,7 @@ public class MainSceneController {
         Alert alert = new Alert(AlertType.INFORMATION, "    这是一个基于JavaFX+Socket的云笔记");
         alert.setTitle("关于");
         alert.setGraphic(
-                new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("resources/note.png"))));
+                new ImageView(new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("resources/note.png")))));
         alert.setHeaderText("     Author:" + "沈阳理工大学课程设计 " + "\n\r" + "     Version: 1.0");
         alert.initOwner(stage);
         alert.show();
@@ -184,7 +182,7 @@ public class MainSceneController {
         Alert alert = new Alert(AlertType.INFORMATION, "作者：沈阳理工大学课程设计");
         alert.setTitle("说明");
         alert.setGraphic(
-                new ImageView(new Image(getClass().getClassLoader().getResourceAsStream("resources/about.png"))));
+                new ImageView(new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream("resources/about.png")))));
         alert.setHeaderText("  该笔记本实现了类别和文章的增删改查功能，其中文章的查看通过双击表中条\r\n目实现，文章和类别的增加、修改、删除操作通过点击面板上对应按钮实现 。");
         alert.initOwner(stage);
         alert.show();
@@ -192,7 +190,7 @@ public class MainSceneController {
 
     // 左边栏，点击文章按钮
     @FXML
-    public void articleManagementClick(ActionEvent event) throws IOException {
+    public void articleManagementClick() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         // 设置路径基准
 
@@ -206,7 +204,7 @@ public class MainSceneController {
 
         newArticleButton = new Button("新建");
         newArticleButton.setPrefWidth(70);
-        newArticleButton.setOnAction(new EventHandler<ActionEvent>() {
+        newArticleButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
                 stage = new Stage();
@@ -218,14 +216,14 @@ public class MainSceneController {
                 stage.setTitle("新建文章");
                 stage.setScene(scene);
                 stage.getIcons()
-                        .add(new Image(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png")));
+                        .add(new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png"))));
                 stage.show();
             }
         });
 
         updateArticleButton = new Button("修改");
         updateArticleButton.setPrefWidth(70);
-        updateArticleButton.setOnAction(new EventHandler<ActionEvent>() {
+        updateArticleButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
                 if (getSelectedRowArt != null) {
@@ -238,7 +236,7 @@ public class MainSceneController {
                     stage.setTitle("修改文章");
                     stage.setScene(scene);
                     stage.getIcons()
-                            .add(new Image(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png")));
+                            .add(new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png"))));
                     stage.show();
                 }
             }
@@ -294,21 +292,21 @@ public class MainSceneController {
         if (readOnce == 1) {
             articleTable.getColumns().addAll(artId, artIndex, artName, catNameOfArt, artTime);
             // 调整控件间隔
-            ahbox.setSpacing(5.0);
-            ahbox.getChildren().addAll(newArticleButton, updateArticleButton, deleteArticleButton);
-            avbox.setSpacing(5.0);
-            avbox.getChildren().addAll(ahbox, articleTable, artlabel);
-            avbox.setPadding(new Insets(50, 0, 0, 16));
+            ahBox.setSpacing(5.0);
+            ahBox.getChildren().addAll(newArticleButton, updateArticleButton, deleteArticleButton);
+            avBox.setSpacing(5.0);
+            avBox.getChildren().addAll(ahBox, articleTable, artLabel);
+            avBox.setPadding(new Insets(50, 0, 0, 16));
             ++readOnce;
         }
-        artlabel.setText("共" + artData.size() + "条记录");
-        articleBlock.getChildren().addAll(avbox);
+        artLabel.setText("共" + artData.size() + "条记录");
+        articleBlock.getChildren().addAll(avBox);
 
     }
 
     // 点击分类按钮
     @FXML
-    public void categoryManagementClick(ActionEvent event) throws IOException {
+    public void categoryManagementClick() throws IOException {
         catData.clear();
         // 点击按钮，出现界面
         FXMLLoader loader = new FXMLLoader();
@@ -322,7 +320,7 @@ public class MainSceneController {
 
         newCategoryButton = new Button("新建");
         newCategoryButton.setPrefWidth(70);
-        newCategoryButton.setOnAction(new EventHandler<ActionEvent>() {
+        newCategoryButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
 
@@ -334,7 +332,7 @@ public class MainSceneController {
                 }
                 stage.setTitle("新建类别");
                 stage.getIcons()
-                        .add(new Image(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png")));
+                        .add(new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png"))));
                 stage.setScene(scene);
                 stage.show();
 
@@ -343,7 +341,7 @@ public class MainSceneController {
 
         updateCategoryButton = new Button("修改");
         updateCategoryButton.setPrefWidth(70);
-        updateCategoryButton.setOnAction(new EventHandler<ActionEvent>() {
+        updateCategoryButton.setOnAction(new EventHandler<>() {
             @Override
             public void handle(ActionEvent event) {
                 if (getSelectedRowCat != null) {
@@ -355,7 +353,7 @@ public class MainSceneController {
                     }
                     stage.setTitle("修改类别");
                     stage.getIcons()
-                            .add(new Image(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png")));
+                            .add(new Image(Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("resources/logo.png"))));
                     stage.setScene(scene);
                     stage.show();
                 }
@@ -437,15 +435,15 @@ public class MainSceneController {
         catData.clear();
         // 读取数据库中数据
         String rs = CategoryDao.select(Integer.toString(new LoginController().getUserId()));
-        for (String category : rs.split("10010")) {
+        for (String category : rs.split(END)) {
             if("".equals(category))
                 break;
-            String id = category.split(";")[0];
-            String userId = category.split(";")[1];
-            String index = category.split(";")[2];
-            String name = category.split(";")[3];
-            String time = category.split(";")[4];
-            cp = new CategoryProperty(id, userId, index, name, time);
+            String id = category.split(DELIMITER)[0];
+            String userId = category.split(DELIMITER)[1];
+            String index = category.split(DELIMITER)[2];
+            String name = category.split(DELIMITER)[3];
+            String time = category.split(DELIMITER)[4];
+            CategoryProperty cp = new CategoryProperty(id, userId, index, name, time);
             catData.add(cp);
         }
         System.out.println(catData.size());
@@ -458,29 +456,30 @@ public class MainSceneController {
         // 读取数据库中数据
         String rs = ArticleDao.select(String.valueOf(new LoginController().getUserId()));
         System.out.println(rs);
-        for (String article : rs.split("10010")){
+        for (String article : rs.split(END)){
             if("".equals(article))
                 break;
-            String artId = article.split(";")[0];
-            String userId = article.split(";")[1];
-            String catId = article.split(";")[2];
-            String index = article.split(";")[3];
-            String artName = article.split(";")[4];
-            String catName = article.split(";")[5];
-            String content = article.split(";")[6];
-            String time = article.split(";")[7];
-            ap = new ArticleProperty(artId, userId, catId, index, artName, catName, content, time);
+            String artId = article.split(DELIMITER)[0];
+            String userId = article.split(DELIMITER)[1];
+            String catId = article.split(DELIMITER)[2];
+            String index = article.split(DELIMITER)[3];
+            String artName = article.split(DELIMITER)[4];
+            String catName = article.split(DELIMITER)[5];
+            String content = article.split(DELIMITER)[6];
+            String time = article.split(DELIMITER)[7];
+            // 相关文章变量
+            ArticleProperty ap = new ArticleProperty(artId, userId, catId, index, artName, catName, content, time);
             artData.add(ap);
         }
-        artlabel.setText("共" + artData.size() + "条记录");
+        artLabel.setText("共" + artData.size() + "条记录");
         articleTable.setItems(artData);
     }
 
     private boolean delDateExistInArtOrNot() throws IOException {
         boolean flag = false;
         String rs = ArticleDao.select(String.valueOf(new LoginController().getUserId()));
-        for (String cate : rs.split("10010")) {
-            int catId = Integer.valueOf(cate.split(";")[2]);
+        for (String cate : rs.split(END)) {
+            int catId = Integer.parseInt(cate.split(DELIMITER)[2]);
             if (getSelectedRowCat.getCatId() == catId) {
                 flag = true;
             }
