@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:id="mainScene" prefHeight="606.0" prefWidth="752.0"
+      xmlns="http://javafx.com/javafx/8" fx:controller="cloud.note.controller.MainSceneController">
+    <children>
+        <MenuBar fx:id="menuBar" prefHeight="27.0" prefWidth="696.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="文件">
+                    <items>
+                        <MenuItem fx:id="closeMenuItem1" mnemonicParsing="false" onAction="#closeMenuItemClick"
+                                  text="关闭"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="帮助">
+                    <items>
+                        <MenuItem fx:id="explainItem" mnemonicParsing="false" onAction="#explainItemClick" text="说明"/>
+                        <MenuItem fx:id="aboutItem" mnemonicParsing="false" onAction="#aboutItemClick" text="关于"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <BorderPane fx:id="root" prefHeight="428.0" prefWidth="589.0">
+            <left>
+                <TitledPane fx:id="naviArea" animated="false" prefHeight="554.0" prefWidth="115.0" text="   导航菜单"
+                            BorderPane.alignment="CENTER">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="399.0" prefWidth="113.0">
+                            <children>
+                                <Button fx:id="articleManagement" layoutX="11.0" layoutY="14.0" mnemonicParsing="false"
+                                        onAction="#articleManagementClick" prefHeight="32.0" prefWidth="92.0"
+                                        text="文章管理"/>
+                                <Button fx:id="categoryManagement" layoutX="11.0" layoutY="65.0" mnemonicParsing="false"
+                                        onAction="#categoryManagementClick" prefHeight="34.0" prefWidth="92.0"
+                                        text="类别管理"/>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </TitledPane>
+            </left>
+            <top>
+                <AnchorPane fx:id="infoArea" prefHeight="30.0" prefWidth="617.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Label fx:id="welcomeLabel" layoutX="24.0" layoutY="7.0" prefHeight="15.0" prefWidth="274.0"
+                               text="Welcome！"/>
+                    </children>
+                </AnchorPane>
+            </top>
+            <right>
+                <AnchorPane fx:id="sideArea" minHeight="-Infinity" minWidth="-Infinity" prefHeight="475.0"
+                            prefWidth="28.0" BorderPane.alignment="CENTER"/>
+            </right>
+            <bottom>
+                <AnchorPane fx:id="bottomArea" minHeight="-Infinity" minWidth="-Infinity" prefHeight="16.0"
+                            prefWidth="780.0" BorderPane.alignment="CENTER"/>
+            </bottom>
+            <center>
+                <BorderPane fx:id="articleArea" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER"/>
+            </center>
+        </BorderPane>
+        <Label prefHeight="15.0" prefWidth="775.0" text="  Copyright © 2019 "/>
+    </children>
+</VBox>
